@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.herberto.eventTeams.commands.TeamAdminCommand;
+import xyz.herberto.eventTeams.papi.TeamPlaceholders;
 
 import java.util.Arrays;
 
@@ -25,6 +26,8 @@ public final class EventTeams extends JavaPlugin {
         ).forEach(manager::registerCommand);
 
         saveDefaultConfig();
+
+        new TeamPlaceholders(this).register();
 
     }
 

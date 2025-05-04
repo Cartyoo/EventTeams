@@ -3,3 +3,4 @@ version: '1.0.0'
 main: xyz.herberto.eventTeams.EventTeams
 api-version: '1.21'
 authors: [ herberto ]
+depend: [ PlaceholderAPI ]

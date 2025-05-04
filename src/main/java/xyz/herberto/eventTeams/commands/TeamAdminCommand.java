@@ -37,6 +37,23 @@ public class TeamAdminCommand extends BaseCommand {
 
     }
 
+    @Subcommand("delete")
+    @Description("Delete a team")
+    public void delete(CommandSender sender, @Name("team name") String name) {
+
+        if(EventTeams.getInstance().getConfig().getConfigurationSection("teams." + name) == null) {
+
+            sender.sendMessage("Team " + name + " does not exist!");
+            return;
+
+        }
+
+        Team team = new Team(name);
+        team.delete();
+        sender.sendMessage("Deleted team " + name);
+
+    }
+
     @Subcommand("add")
     @Description("Add a player to a team")
     @CommandCompletion("@players @nothing")

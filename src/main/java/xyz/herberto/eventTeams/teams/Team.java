@@ -32,6 +32,12 @@ public class Team {
 
         EventTeams.getInstance().getConfig().set("teams." + name + ".members", members);
 
+        EventTeams.getInstance().saveConfig();
+
+    }
+
+    public void delete() {
+        EventTeams.getInstance().getConfig().set("teams." + name, null);
     }
 
 

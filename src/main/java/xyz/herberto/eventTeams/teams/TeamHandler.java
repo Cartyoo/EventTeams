@@ -31,6 +31,7 @@ public class TeamHandler {
 
     }
 
+
     public static Team getTeam(UUID uuid) {
 
         ConfigurationSection root = EventTeams.getInstance().getConfig().getConfigurationSection("teams");
