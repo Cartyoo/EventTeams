@@ -4,6 +4,8 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
+import jdk.jfr.Event;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.herberto.eventTeams.EventTeams;
@@ -54,6 +56,43 @@ public class TeamAdminCommand extends BaseCommand {
 
     }
 
+    @Subcommand("list")
+    @Description("List all teams or members in a specific team")
+    public void list(CommandSender sender, @Optional @Name("team name") String name) {
+
+        if(name == null) {
+            for(Team team : TeamHandler.getAllTeams()) {
+
+                sender.sendMessage("Team:");
+                sender.sendMessage("  | Name: " + team.getName());
+                sender.sendMessage("  | Total Members: " + team.getMembers().size());
+                sender.sendMessage("  | See members with /teamadmin list " + team.getName());
+                sender.sendMessage(" ");
+
+            }
+        } else {
+
+            Team team = TeamHandler.getTeam(name);
+
+            if(team == null) {
+                sender.sendMessage("Team " + name + " does not exist!");
+                return;
+            }
+
+            sender.sendMessage("Team: ");
+            sender.sendMessage("  | Name: " + team.getName());
+            sender.sendMessage("  | Total Members: " + team.getMembers().size());
+            sender.sendMessage("  | Members:");
+
+            for(UUID member : team.getMembers()) {
+                Player player = EventTeams.getInstance().getServer().getPlayer(member);
+                sender.sendMessage("    | " + player.getName());
+            }
+
+        }
+
+    }
+
     @Subcommand("add")
     @Description("Add a player to a team")
     @CommandCompletion("@players @nothing")
@@ -68,6 +107,7 @@ public class TeamAdminCommand extends BaseCommand {
 
         if(inTeam != null) {
             sender.sendMessage("Player " + target.getPlayer().getName() + " is already in another team (" + inTeam.getName() + ")");
+            return;
         }
 
         Team team1 = TeamHandler.getTeam(team);
@@ -110,6 +150,7 @@ public class TeamAdminCommand extends BaseCommand {
         for(UUID member : team.getMembers()) {
             Player memberPlayer = EventTeams.getInstance().getServer().getPlayer(member);
             memberPlayer.teleport(player);
+            player.sendMessage("player: " + memberPlayer.getName());
         }
 
         player.sendMessage("You have teleported all members of the team " + teamName + " to your location.");

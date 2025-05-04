@@ -20,6 +20,7 @@ public final class EventTeams extends JavaPlugin {
         instance = this;
 
         PaperCommandManager manager = new PaperCommandManager(this);
+        manager.enableUnstableAPI("help");
 
         Arrays.asList(
                 new TeamAdminCommand()
