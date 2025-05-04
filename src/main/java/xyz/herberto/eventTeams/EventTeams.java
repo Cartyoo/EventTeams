@@ -28,7 +28,7 @@ public final class EventTeams extends JavaPlugin {
 
         saveDefaultConfig();
 
-        new TeamPlaceholders(this).register();
+        new TeamPlaceholders().register();
 
     }
 

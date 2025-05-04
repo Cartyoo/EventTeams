@@ -1,7 +1,6 @@
 package xyz.herberto.eventTeams.teams;
 
 import lombok.Data;
-import org.bukkit.configuration.ConfigurationSection;
 import xyz.herberto.eventTeams.EventTeams;
 
 import java.util.ArrayList;
@@ -38,9 +37,8 @@ public class Team {
         EventTeams.getInstance().saveConfig();
     }
 
-
     public void delete() {
         EventTeams.getInstance().getConfig().set("teams." + name, null);
+        EventTeams.getInstance().saveConfig();
     }
-
 }

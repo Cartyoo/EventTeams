@@ -11,18 +11,24 @@ import java.util.UUID;
 public class TeamHandler {
 
     public static Team getTeam(String name) {
-
         ConfigurationSection root = EventTeams.getInstance().getConfig().getConfigurationSection("teams");
+
+        if (root == null) {
+            return null;
+        }
 
         for (String key : root.getKeys(false)) {
             if (key.equalsIgnoreCase(name)) {
-                List<String> configMembers = root.getStringList(key);
+                List<String> configMembers = root.getStringList(key + ".members");
 
                 List<UUID> members = new ArrayList<>();
 
                 for(String configMember : configMembers) {
-                    Bukkit.getLogger().info("member: + " + configMember);
-                    members.add(UUID.fromString(configMember));
+                    try {
+                        members.add(UUID.fromString(configMember));
+                    } catch (IllegalArgumentException e) {
+                        EventTeams.getInstance().getLogger().warning("Invalid UUID in team " + name + ": " + configMember);
+                    }
                 }
 
                 return new Team(name, members);
@@ -30,15 +36,12 @@ public class TeamHandler {
         }
 
         return null;
-
     }
 
-
     public static Team getTeam(UUID uuid) {
-
         for(String teamName : getAllTeamNames()) {
             Team team = getTeam(teamName);
-            if(team.getMembers().contains(uuid)) {
+            if(team != null && team.getMembers() != null && team.getMembers().contains(uuid)) {
                 return team;
             }
         }
@@ -48,6 +51,9 @@ public class TeamHandler {
 
     public static List<String> getAllTeamNames() {
         ConfigurationSection root = EventTeams.getInstance().getConfig().getConfigurationSection("teams");
+        if (root == null) {
+            return new ArrayList<>();
+        }
         return new ArrayList<>(root.getKeys(false));
     }
 
@@ -56,13 +62,14 @@ public class TeamHandler {
 
         ConfigurationSection root = EventTeams.getInstance().getConfig().getConfigurationSection("teams");
 
+        if (root == null) {
+            return teams;
+        }
+
         for(String key : root.getKeys(false)) {
-            ConfigurationSection section = root.getConfigurationSection(key);
             teams.add(getTeam(key));
         }
 
         return teams;
-
     }
-
 }

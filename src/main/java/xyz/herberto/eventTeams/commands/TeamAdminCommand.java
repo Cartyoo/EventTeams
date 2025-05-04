@@ -133,7 +133,7 @@ public class TeamAdminCommand extends BaseCommand {
         team.getMembers().remove(target.getPlayer().getUniqueId());
         team.save();
 
-        sender.sendMessage("Removed " + target.getPlayer().getName() + " from the team " + team);
+        sender.sendMessage("Removed " + target.getPlayer().getName() + " from the team " + team.getName());
     }
 
     @Subcommand("tpall")
@@ -150,7 +150,6 @@ public class TeamAdminCommand extends BaseCommand {
         for(UUID member : team.getMembers()) {
             Player memberPlayer = EventTeams.getInstance().getServer().getPlayer(member);
             memberPlayer.teleport(player);
-            player.sendMessage("player: " + memberPlayer.getName());
         }
 
         player.sendMessage("You have teleported all members of the team " + teamName + " to your location.");
